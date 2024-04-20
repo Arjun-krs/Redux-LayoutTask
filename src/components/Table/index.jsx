@@ -1,97 +1,80 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { FaTrashAlt, FaEye, FaEdit } from "react-icons/fa";
-import ConfirmPopup from "../Popup/index";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { getAction, deleteAction } from "../Action/index";
 import "../../App.css";
 import Cancel from "../../assets/images/cancel.svg";
 
 function Table() {
-    const [users, setUsers] = useState([]);
-    const [filteredUsers, setFilteredUsers] = useState([]);
-    const [error, setError] = useState("");
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const users = useSelector((state) => state.login.userData); // Selecting userData from Redux state
+    const error = useSelector((state) => state.login.error); // Selecting error from Redux state
     const [showPopup, setShowPopup] = useState(false);
-    const [deleteUserId, setDeleteUserId] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
-    const [searchQuery, setSearchQuery] = useState("");
+    const [deleteUserId, setDeleteUserId] = useState(null); // State to store the user ID to be deleted
+    const [currentPage, setCurrentPage] = useState(1); // State to manage current page number
+    const itemsPerPage = 5; // Number of items to display per page
+
 
     useEffect(() => {
-        getData();
+        dispatch(getAction());// Fetch initial user data when the component mounts
     }, []);
 
-    const getData = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_API_WEB_URL}/userdata`);
-            setUsers(response.data);
-            setFilteredUsers(response.data);
-        } catch (error) {
-            setError("Error fetching data");
-            console.error("Error fetching data: ", error);
-        }
-    };
-
-    useEffect(() => {
-        const results = users.filter(user =>
-            Object.values(user).some(value =>
-                typeof value === "string" && value.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-        );
-        setFilteredUsers(results);
-    }, [searchQuery, users]);
-
+    // Function to initiate delete operation
     const onDelete = (id) => {
-        setDeleteUserId(id);
+        setDeleteUserId(id); // Set the user ID to be deleted
         setShowPopup(true);
+    }
+
+    // Function to handle confirmed delete operation
+    const handleConfirmDelete = () => {
+        dispatch(deleteAction(deleteUserId)) // Dispatch delete action
+            .then(() => {
+                setShowPopup(false); // Close the popup after successful deletion
+            })
+            .catch((error) => {
+                console.error("Error deleting user: ", error);
+                setShowPopup(false);
+            });
     };
 
-    const handleConfirmDelete = async () => {
-        try {
-            await axios.delete(`${import.meta.env.VITE_API_WEB_URL}/userdata/${deleteUserId}`);
-            getData();
-            setShowPopup(false);
-        } catch (error) {
-            setError("Error deleting user");
-            console.error("Error deleting user: ", error);
-        }
-    };
 
+
+    // Function to handle cancel delete operation
     const handleCancelDelete = () => {
         setShowPopup(false);
     };
 
+    // Function to handle update operation
     const handleUpdate = (id) => {
         const updatedUser = users.find(user => user.id === id);
         navigate("/Form", { state: { user: updatedUser, isUpdate: true } });
     };
 
+    // Function to handle view operation
     const handleView = (id) => {
         const viewUser = users.find(user => user.id === id);
         navigate("/Form", { state: { user: viewUser, isView: true } });
     };
 
+    // Function to navigate to the form for adding a new user
     const handleNavigation = () => {
         navigate("/Form");
     };
 
+    // Calculate index of last and first item for pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = Array.isArray(users) ? users.slice(indexOfFirstItem, indexOfLastItem) : [];
 
     return (
         <>
+
             {error && <p className="text-danger">{error}</p>}
-            <div className="d-flex justify-content-end mt-4">
-                <input
-                    type="text"
-                    className="search"
-                    placeholder="Search"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button type="submit" className="secondary-btn">Export CSV</button>
-            </div>
             <div className="table-wrapper">
                 <table>
                     <thead>
@@ -121,32 +104,39 @@ function Table() {
                         ))}
                     </tbody>
                 </table>
-                <div className="footer d-flex justify-content-end">
-                    <button className="primary-btn btn rounded-circle" style={{ width: "50px", height: "50px" }} onClick={handleNavigation}>+</button>
-                </div>
-                <div className="pagination">
-                    <button className="primary-btn" onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1}>
-                        Previous
+
+                <div className="pagination justify-content-end mt-5">
+                    <button style={{ borderStyle: "none", backgroundColor: "transparent", fontSize: "24px" }} onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1}>
+                        <IoIosArrowBack />
                     </button>
-                    <button className="secondary-btn" onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentItems.length < itemsPerPage}>
-                        Next
+                    <button style={{ borderStyle: "none", backgroundColor: "transparent", fontSize: "24px" }} onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentItems.length < itemsPerPage}>
+                        <IoIosArrowForward />
                     </button>
                 </div>
             </div>
+            <div className="fixed-bottom text-end m-4">
+                <button className="primary-btn btn rounded-circle" style={{ width: "50px", height: "50px" }} onClick={handleNavigation}>
+                    <FontAwesomeIcon icon={faPlus} />
+                </button>
+            </div>
+
             {showPopup && (
-                <ConfirmPopup
-                    message={"Delete Record?"}
-                    onConfirm={() => {
-                        console.log("deleted successfully");
-                        handleConfirmDelete();
-                    }}
-                    onCancel={() => {
-                        console.log("cancelled successfully");
-                        handleCancelDelete();
-                    }}
-                >
-                    <img src={Cancel} alt="cancel" />
-                </ConfirmPopup>
+                <div className="modal show" tabIndex="-1" role="dialog" style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="mx-auto m-4">
+                                <h5 className="modal-title">Delete Record?</h5>
+                            </div>
+                            <div className="mx-auto m-3">
+                                <img src={Cancel} alt="cancel" />
+                            </div>
+                            <div className="mx-auto m-4">
+                                <button type="button" className="primary-btn" onClick={handleCancelDelete}>Cancel</button>
+                                <button type="button" className="secondary-btn" onClick={handleConfirmDelete}>Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );
