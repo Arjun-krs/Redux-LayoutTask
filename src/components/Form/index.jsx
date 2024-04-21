@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { loginAction } from "../Action/index";
 import { updateAction } from "../Action/index";
 import Input from "../InputField/index";
+import Profile from "../../assets/images/pic.svg";
 import "../../App.css";
 
 function Form() {
@@ -14,15 +15,11 @@ function Form() {
     const { isUpdate, isView, user } = location.state || {}; // Destructuring state from location
 
     useEffect(() => {
-        // Check if the component is in "Update" or "View" mode
         if (isUpdate || isView) {
-            // If in "Update" or "View" mode, set the form data to the user data
             setFormData(user);
         }
     }, [isUpdate, isView, user]);
 
-
-    // Initial form data state
     const [formData, setFormData] = useState({
         CustomerName: "",
         CustomerEmail: "",
@@ -36,25 +33,22 @@ function Form() {
         State: "",
         City: "",
         Pincode: "",
+
     });
 
-    // Handle form input changes
     const handleChange = (e, fieldName) => {
-        if (!isView) { // Check if view mode is enabled
-            const value = e.target.value || ''; // Ensure value is not undefined or null
-            const updatedFormData = { ...formData, [fieldName]: value }; // Update form data with new value
+        if (!isView) { 
+            const value = e.target.value || ''; 
+            const updatedFormData = { ...formData, [fieldName]: value };
             setFormData(updatedFormData);
         }
     };
 
-
-    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (isUpdate) {
-            // Handle update
-            dispatch(updateAction(formData)) // Dispatch update action
+            dispatch(updateAction(formData))
                 .then(() => {
                     navigate("/");
                 })
@@ -62,8 +56,7 @@ function Form() {
                     console.error("Error updating data:", error);
                 });
         } else {
-            // Handle save
-            dispatch(loginAction(formData)) // Dispatch login action
+            dispatch(loginAction(formData))
                 .then(() => {
                     setFormData({
                         CustomerName: "",
@@ -78,6 +71,7 @@ function Form() {
                         State: "",
                         City: "",
                         Pincode: "",
+
                     });
                     navigate("/");
                 })
@@ -87,7 +81,6 @@ function Form() {
         }
     };
 
-    // Handle navigation to home page
     const handleNavigation = (e) => {
         e.preventDefault();
         navigate("/");
@@ -95,7 +88,17 @@ function Form() {
 
     return (
         <>
+            {isView && (
+                <div className="profile-display d-flex" style={{ gap: "30px" }}>
+                    <img src={Profile} alt="profile" />
+                    <div className="customer-detail ">
+                        <h3>{formData.CustomerName}</h3>
+                        <p>Customer ID: {formData.id}</p>
+                    </div>
+                </div>
+            )}
             <form onSubmit={handleSubmit}>
+
                 <div className="header-form">
                     <h2>Basic details</h2>
                     <div className="form-grid">

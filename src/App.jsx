@@ -5,11 +5,17 @@ import Header from "../src/components/Header/index";
 import SidebarNav from "../src/components/SidebarNav";
 import Form from "../src/components/Form/index";
 import Table from "../src/components/Table/index";
+import Login from "../src/components/Admin/Login-page/index"
+import Signup from "../src/components/Admin/Signup-page/index"
 
 function App() {
   return (
 
     <BrowserRouter>
+      {/* <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+      </Routes> */}
       <div className=' d-flex'>
         <SidebarNav />
         <div className='body-wrapper'>

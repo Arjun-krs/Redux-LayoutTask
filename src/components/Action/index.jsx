@@ -1,14 +1,14 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// Async thunk action to handle login
+
 export const loginAction = createAsyncThunk(
-  "login/loginAction", // Action type
-  async (formData) => { // Async function to handle login
+  "login/loginAction", 
+  async (formData) => { 
     try {
-      const response = await axios.post( // Making a POST request to the API
-        `${import.meta.env.VITE_API_WEB_URL}/userdata`, // API endpoint URL
-        formData // Data to send in the request body
+      const response = await axios.post( 
+        `${import.meta.env.VITE_API_WEB_URL}/userdata`, 
+        formData 
       );
       return response.data;
     } catch (error) {
@@ -17,13 +17,13 @@ export const loginAction = createAsyncThunk(
   }
 );
 
-// Async thunk action to fetch user data
+
 export const getAction = createAsyncThunk(
-  "get/getAction", // Action type
-  async () => { // Async function to fetch data
+  "get/getAction", 
+  async () => { 
     try {
-      const response = await axios.get( // Making a GET request to the API
-        `${import.meta.env.VITE_API_WEB_URL}/userdata` // API endpoint URL
+      const response = await axios.get( 
+        `${import.meta.env.VITE_API_WEB_URL}/userdata` 
       );
       return response.data;
     } catch (error) {
@@ -32,13 +32,13 @@ export const getAction = createAsyncThunk(
   }
 );
 
-// Async thunk action to delete a user
+
 export const deleteAction = createAsyncThunk(
-  "delete/deleteAction", // Action type
-  async (userId, { dispatch }) => { // Async function to handle delete
+  "delete/deleteAction", 
+  async (userId) => { 
     try {
-      await axios.delete( // Making a DELETE request to the API
-        `${import.meta.env.VITE_API_WEB_URL}/userdata/${userId}` // API endpoint URL with userId
+      await axios.delete( 
+        `${import.meta.env.VITE_API_WEB_URL}/userdata/${userId}` 
       );
       return userId;
     } catch (error) {
@@ -47,14 +47,15 @@ export const deleteAction = createAsyncThunk(
   }
 );
 
-// Async thunk action to update user data
+
+
 export const updateAction = createAsyncThunk(
-  "update/updateAction", // Action type
-  async (formData) => { // Async function to handle update
+  "update/updateAction", 
+  async (formData) => { 
     try {
-      const response = await axios.put( // Making a PUT request to the API
-        `${import.meta.env.VITE_API_WEB_URL}/userdata/${formData.id}`, // API endpoint URL with userId
-        formData // Data to send in the request body
+      const response = await axios.put( 
+        `${import.meta.env.VITE_API_WEB_URL}/userdata/${formData.id}`, 
+        formData
       );
       return response.data;
     } catch (error) {

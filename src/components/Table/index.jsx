@@ -15,26 +15,26 @@ function Table() {
     const users = useSelector((state) => state.login.userData); // Selecting userData from Redux state
     const error = useSelector((state) => state.login.error); // Selecting error from Redux state
     const [showPopup, setShowPopup] = useState(false);
-    const [deleteUserId, setDeleteUserId] = useState(null); // State to store the user ID to be deleted
-    const [currentPage, setCurrentPage] = useState(1); // State to manage current page number
-    const itemsPerPage = 5; // Number of items to display per page
+    const [deleteUserId, setDeleteUserId] = useState(null); 
+    const [currentPage, setCurrentPage] = useState(1); 
+    const itemsPerPage = 5; 
 
 
     useEffect(() => {
-        dispatch(getAction());// Fetch initial user data when the component mounts
-    }, []);
+        dispatch(getAction());
+    },[]);
 
-    // Function to initiate delete operation
+    
     const onDelete = (id) => {
-        setDeleteUserId(id); // Set the user ID to be deleted
+        setDeleteUserId(id); 
         setShowPopup(true);
     }
 
-    // Function to handle confirmed delete operation
+    
     const handleConfirmDelete = () => {
-        dispatch(deleteAction(deleteUserId)) // Dispatch delete action
+        dispatch(deleteAction(deleteUserId)) 
             .then(() => {
-                setShowPopup(false); // Close the popup after successful deletion
+                setShowPopup(false); 
             })
             .catch((error) => {
                 console.error("Error deleting user: ", error);
