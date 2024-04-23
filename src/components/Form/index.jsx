@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import { IoIosArrowForward } from "react-icons/io";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../Action/index";
 import { updateAction } from "../Action/index";
 import Input from "../InputField/index";
-import "../../App.css";
+import Profile from "../../assets/images/pic.svg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import "../../App.scss";
+import { CountryDropdownComponent, StateDropdownComponent } from "../Dropdown/index"
 
 function Form() {
     const dispatch = useDispatch();
@@ -16,7 +19,9 @@ function Form() {
 
     useEffect(() => {
         if (isUpdate || isView) {
-            setFormData(user);
+            if (user) {
+                setFormData(user);
+            }
         }
     }, [isUpdate, isView, user]);
 
@@ -33,20 +38,20 @@ function Form() {
         State: "",
         City: "",
         Pincode: "",
-        Image: "",
 
     });
 
-    const handleChange = (e, fieldName) => {
+    const handleChange = (value, fieldName) => {
         if (!isView) {
-            const value = e.target.value || '';
             const updatedFormData = { ...formData, [fieldName]: value };
             setFormData(updatedFormData);
         }
     };
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
 
         if (isUpdate) {
             dispatch(updateAction(formData))
@@ -89,29 +94,29 @@ function Form() {
 
     return (
         <>
-            {isView || isUpdate ? (
-                <div className="customer-overview mt-5 m-4">
-                    <div className="overview">
-                        <h4>
-                            Customers <IoIosArrowForward />
-                            {isUpdate ? "Edit Customer" : ""}
-                            {isView && ` Overview of ${formData.CustomerName}`}
-                        </h4>
+            {isView && (
+                <div className="display-wrapper m-4 m-5">
+                    <h4>Customer <FontAwesomeIcon icon={faChevronRight} width={12} height={12} />  Overview Of {formData.CustomerName} </h4>
+                    <div className="customer mt-4">
+                        <div className="general"><h2>General Details</h2></div>
                     </div>
-                    {isView && (
-                        <div className="customer mt-4">
-                            <h2>General Details</h2>
-                        </div>
-                    )}
                 </div>
-            ) : <div className="customer-overview mt-5 m-4">
-                <h4>
-                    Customers <IoIosArrowForward /> Add Customer
-                </h4>
-            </div>}
+            )}
+            {isUpdate && (
+                <div className="display-wrapper m-4 m-5">
+                    <h4>Customer <FontAwesomeIcon icon={faChevronRight} width={12} height={12} /> Edit Customer</h4>
+                </div>
+            )}
+            {!isView && !isUpdate && (
+                <div className="display-wrapper m-4 m-5">
+                    <h4>Customer <FontAwesomeIcon icon={faChevronRight} width={12} height={12} />  Add Customer</h4>
+                </div>
+            )}
+
+
             {isView && (
                 <div className="profile-display d-flex" style={{ gap: "30px" }}>
-                    <img src={formData.Image} alt="profile" width={65} height={65} />
+                    <img src={Profile} alt="profile" />
                     <div className="customer-detail ">
                         <h3>{formData.CustomerName}</h3>
                         <p>Customer ID: {formData.id}</p>
@@ -157,6 +162,7 @@ function Form() {
                         </div>
                     </div>
                 </div>
+
                 <div className="footer-form">
                     <h2>Address details</h2>
                     <div className="form-grid">
@@ -196,6 +202,7 @@ function Form() {
                                 disabled={isView}
                             />
                         </div>
+
                         <div className="textfield">
                             <label className="form-label" htmlFor="AddresslineOne">Address Line 1</label>
                             <Input
@@ -220,38 +227,20 @@ function Form() {
                                 disabled={isView}
                             />
                         </div>
-                        <div className="textfield">
-                            <label className="form-label" htmlFor="Country">Country</label>
-                            <select
-                                className="form-select"
-                                id="Country"
-                                value={formData.Country || ''}
-                                onChange={(e) => handleChange(e, "Country")}
-                                disabled={isView}
-                            >
-                                <option value="Country">Select a Country</option>
-                                <option value="India">India</option>
-                                <option value="USA">USA</option>
-                                <option value="London">London</option>
-                                <option value="France">France</option>
-                            </select>
-                        </div>
-                        <div className="textfield">
-                            <label className="form-label" htmlFor="State">State</label>
-                            <select
-                                className="form-select"
-                                id="State"
-                                value={formData.State || ''}
-                                onChange={(e) => handleChange(e, "State")}
-                                disabled={isView}
-                            >
-                                <option value="State">Select a State</option>
-                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                <option value="Kerala">Kerala</option>
-                                <option value="Andhra pradesh">Andhra pradesh</option>
-                                <option value="Karnataka">Karnataka</option>
-                            </select>
-                        </div>
+
+
+                        <CountryDropdownComponent
+                            value={formData.Country ?? ''}
+                            onChange={(val) => handleChange(val, "Country")}
+                            disabled={isView}
+                        />
+
+                        <StateDropdownComponent
+                            country={formData.Country}
+                            value={formData.State ?? ''}
+                            onChange={(val) => handleChange(val, "State")}
+                            disabled={isView}
+                        />
                         <div className="textfield">
                             <label className="form-label" htmlFor="City">City</label>
                             <Input
@@ -281,13 +270,12 @@ function Form() {
                 </div>
                 <div className="head-wrapper">
                     <div className="footer d-flex justify-content-end" style={{ gap: 20, padding: 20 }}>
-                        <button className="secondary-btn" onClick={handleNavigation}>
-                            Go Back
-                        </button>
-
-                        <button type="submit" className="primary-btn" disabled={isView}>
-                            {isUpdate ? "Update" : "Save"}
-                        </button>
+                        <button className="secondary-btn" onClick={handleNavigation}>Go Back</button>
+                        {!isView && (
+                            <button type="submit" className="primary-btn">
+                                {isUpdate ? "Update" : "Save"}
+                            </button>
+                        )}
                     </div>
                 </div>
             </form>

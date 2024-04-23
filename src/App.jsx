@@ -1,5 +1,5 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../src/App.css';
+import '../src/App.scss';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "../src/components/Header/index";
 import SidebarNav from "../src/components/SidebarNav";
@@ -16,18 +16,17 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
       </Routes> */}
-      
-        <SidebarNav />
-        <div className='body-wrapper'>
-          <div className='head-wrapper'><Header /></div>
-          <section>
-            <Routes>
-              <Route path="/" element={<Table />} />
-              <Route path="/Form" element={<Form />} />
-            </Routes>
-          </section>
-        </div>
-      
+      <SidebarNav />
+      <div className='body-wrapper'>
+        <div className='head-wrapper'><Header /></div>
+        <section>
+          <Routes>
+            <Route path="/" element={<Table />} />
+            <Route path="/Form" element={<Form />} />
+          </Routes>
+        </section>
+      </div>
+
     </BrowserRouter>
 
   );

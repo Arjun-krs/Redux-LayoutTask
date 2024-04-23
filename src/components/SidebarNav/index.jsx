@@ -10,7 +10,7 @@ import Support from "../../assets/images/support.svg";
 import Report from "../../assets/images/report.svg";
 import Setting from "../../assets/images/settings.svg";
 import Logout from "../../assets/images/logout.svg";
-import "../../App.css";
+import "../../App.scss";
 
 function SidebarNav() {
   const [activeItem, setActiveItem] = useState(null);
