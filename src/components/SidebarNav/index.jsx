@@ -20,7 +20,7 @@ function SidebarNav() {
   };
 
   return (
-    <div className="navigate d-flex flex-column p-3" style={{ gap: 45 }}>
+    <div className="navigate d-flex flex-column p-3" style={{ gap: 28 }}>
       <img
         className={activeItem === "Logo" ? "active" : ""}
         src={Logo}

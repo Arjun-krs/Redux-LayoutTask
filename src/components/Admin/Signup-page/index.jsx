@@ -5,22 +5,35 @@ import Input from "../../InputField/index";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../Redux/Action/index";
+import { Icon } from 'react-icons-kit';
+import { eyeOff } from 'react-icons-kit/feather/eyeOff';
+import { eye } from 'react-icons-kit/feather/eye';
 
 function Signup() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [formData, setFormData] = useState({
-        LegalName: "",
-        UserName: "",
-        Email: "",
-        PhoneNumber: "",
-        Password: "",
-    });
+    // Form state
+    const [LegalName, setLegalName] = useState("");
+    const [UserName, setUserName] = useState("");
+    const [Email, setEmail] = useState("");
+    const [PhoneNumber, setPhoneNumber] = useState("");
+    const [Password, setPassword] = useState("");
+
+    // Password visibility state
+    const [type, setType] = useState('Password');
+    const [icon, setIcon] = useState(eyeOff);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(loginAction(formData)) // Dispatch update action
+        const formData = {
+            LegalName,
+            UserName,
+            Email,
+            PhoneNumber,
+            Password,
+        };
+        dispatch(loginAction(formData))
             .then(() => {
                 navigate("/");
             })
@@ -29,12 +42,15 @@ function Signup() {
             });
     }
 
-
-    const handleChange = (e, fieldName) => {
-        const value = e.target.value || '';
-        const updatedFormData = { ...formData, [fieldName]: value };
-        setFormData(updatedFormData);
-    };
+    const handleToggle = () => {
+        if (type === 'Password') {
+            setIcon(eye);
+            setType('text');
+        } else {
+            setIcon(eyeOff);
+            setType('Password');
+        }
+    }
 
     const handleNavigation = () => {
         navigate("/");
@@ -63,9 +79,11 @@ function Signup() {
                             name="LegalName"
                             placeholder="Enter"
                             className="form-control"
-                            onChange={(e) => handleChange(e, "LegalName")}
+                            value={LegalName}
+                            onChange={(e) => setLegalName(e.target.value)}
                         />
                     </div>
+
                     <div className="textfield mt-3">
                         <label className="form-label">User Handle</label>
                         <Input
@@ -73,7 +91,9 @@ function Signup() {
                             name="UserName"
                             placeholder="Enter"
                             className="form-control"
-                            onChange={(e) => handleChange(e, "UserName")}
+                            value={UserName}
+                            onChange={(e) => setUserName(e.target.value)}
+
                         />
                     </div>
                     <div className="textfield mt-3">
@@ -83,7 +103,8 @@ function Signup() {
                             name="Email"
                             placeholder="Enter"
                             className="form-control"
-                            onChange={(e) => handleChange(e, "Email")}
+                            value={Email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="textfield mt-3">
@@ -93,19 +114,27 @@ function Signup() {
                             name="PhoneNumber"
                             placeholder="Enter"
                             className="form-control"
-                            onChange={(e) => handleChange(e, "PhoneNumber")}
+                            value={PhoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+
                         />
                     </div>
-                    <div className="textfield mt-3">
+                    <div className="textfield mt-3 position-relative">
                         <label className="form-label">Password</label>
                         <Input
-                            type="password"
+                            type={type}
                             name="Password"
                             placeholder="Enter"
-                            className="form-control"
-                            onChange={(e) => handleChange(e, "Password")}
+                            className="form-control pr-4"
+                            value={Password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
+                        <span className="eye-icon position-absolute" onClick={handleToggle}>
+                            <Icon className="icon" icon={icon} size={16} />
+                        </span>
                     </div>
+
+
                     <button type="submit" className="btn btn-warning col-12 mt-4 text-white">Register</button>
                 </form>
                 <p>Already have an account? <a href="#" onClick={handleNavigation}>Login Now</a> </p>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
+import { IoIosArrowForward } from "react-icons/io";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../Action/index";
 import { updateAction } from "../Action/index";
 import Input from "../InputField/index";
-import Profile from "../../assets/images/pic.svg";
 import "../../App.css";
 
 function Form() {
@@ -33,12 +33,13 @@ function Form() {
         State: "",
         City: "",
         Pincode: "",
+        Image: "",
 
     });
 
     const handleChange = (e, fieldName) => {
-        if (!isView) { 
-            const value = e.target.value || ''; 
+        if (!isView) {
+            const value = e.target.value || '';
             const updatedFormData = { ...formData, [fieldName]: value };
             setFormData(updatedFormData);
         }
@@ -88,9 +89,29 @@ function Form() {
 
     return (
         <>
+            {isView || isUpdate ? (
+                <div className="customer-overview mt-5 m-4">
+                    <div className="overview">
+                        <h4>
+                            Customers <IoIosArrowForward />
+                            {isUpdate ? "Edit Customer" : ""}
+                            {isView && ` Overview of ${formData.CustomerName}`}
+                        </h4>
+                    </div>
+                    {isView && (
+                        <div className="customer mt-4">
+                            <h2>General Details</h2>
+                        </div>
+                    )}
+                </div>
+            ) : <div className="customer-overview mt-5 m-4">
+                <h4>
+                    Customers <IoIosArrowForward /> Add Customer
+                </h4>
+            </div>}
             {isView && (
                 <div className="profile-display d-flex" style={{ gap: "30px" }}>
-                    <img src={Profile} alt="profile" />
+                    <img src={formData.Image} alt="profile" width={65} height={65} />
                     <div className="customer-detail ">
                         <h3>{formData.CustomerName}</h3>
                         <p>Customer ID: {formData.id}</p>
@@ -98,7 +119,6 @@ function Form() {
                 </div>
             )}
             <form onSubmit={handleSubmit}>
-
                 <div className="header-form">
                     <h2>Basic details</h2>
                     <div className="form-grid">
@@ -137,7 +157,6 @@ function Form() {
                         </div>
                     </div>
                 </div>
-
                 <div className="footer-form">
                     <h2>Address details</h2>
                     <div className="form-grid">
@@ -177,7 +196,6 @@ function Form() {
                                 disabled={isView}
                             />
                         </div>
-
                         <div className="textfield">
                             <label className="form-label" htmlFor="AddresslineOne">Address Line 1</label>
                             <Input
@@ -202,7 +220,6 @@ function Form() {
                                 disabled={isView}
                             />
                         </div>
-
                         <div className="textfield">
                             <label className="form-label" htmlFor="Country">Country</label>
                             <select
@@ -219,8 +236,6 @@ function Form() {
                                 <option value="France">France</option>
                             </select>
                         </div>
-
-
                         <div className="textfield">
                             <label className="form-label" htmlFor="State">State</label>
                             <select
@@ -266,8 +281,13 @@ function Form() {
                 </div>
                 <div className="head-wrapper">
                     <div className="footer d-flex justify-content-end" style={{ gap: 20, padding: 20 }}>
-                        <button className="secondary-btn" onClick={handleNavigation}>Go Back</button>
-                        <button type="submit" className="primary-btn" disabled={isView}>{isUpdate ? "Update" : "Save"}</button>
+                        <button className="secondary-btn" onClick={handleNavigation}>
+                            Go Back
+                        </button>
+
+                        <button type="submit" className="primary-btn" disabled={isView}>
+                            {isUpdate ? "Update" : "Save"}
+                        </button>
                     </div>
                 </div>
             </form>

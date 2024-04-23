@@ -25,9 +25,9 @@ function Login() {
                 />
             </div>
 
-            <div className="login-fields">
+            <div className="login-fields mt-5">
 
-                <div className="form ">
+                <div className="form">
                     <h2>Merchant Login</h2>
                     <h5>Enter your account details</h5>
                     <div className="textfield mt-3">

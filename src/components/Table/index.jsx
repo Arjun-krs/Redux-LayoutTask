@@ -6,8 +6,11 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getAction, deleteAction } from "../Action/index";
+import Input from "../InputField/index"
+import Button from "../Button/index"
 import "../../App.css";
 import Cancel from "../../assets/images/cancel.svg";
+import Search from "../../assets/images/search.svg";
 
 function Table() {
     const dispatch = useDispatch();
@@ -15,26 +18,30 @@ function Table() {
     const users = useSelector((state) => state.login.userData); // Selecting userData from Redux state
     const error = useSelector((state) => state.login.error); // Selecting error from Redux state
     const [showPopup, setShowPopup] = useState(false);
-    const [deleteUserId, setDeleteUserId] = useState(null); 
-    const [currentPage, setCurrentPage] = useState(1); 
-    const itemsPerPage = 5; 
+    const [deleteUserId, setDeleteUserId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
 
     useEffect(() => {
         dispatch(getAction());
-    },[]);
+    }, []);
 
-    
+
     const onDelete = (id) => {
-        setDeleteUserId(id); 
+        setDeleteUserId(id);
         setShowPopup(true);
-    }
 
-    
+    };
+
+
     const handleConfirmDelete = () => {
-        dispatch(deleteAction(deleteUserId)) 
+        dispatch(deleteAction(deleteUserId))
             .then(() => {
-                setShowPopup(false); 
+                setShowPopup(false);
+                setTimeout(() => {
+                    dispatch(getAction());
+                }, 1000);
             })
             .catch((error) => {
                 console.error("Error deleting user: ", error);
@@ -75,6 +82,26 @@ function Table() {
         <>
 
             {error && <p className="text-danger">{error}</p>}
+            <div className="search-wrapper d-flex justify-content-end m-4" style={{ gap: "20px" }}>
+                <div className="input">
+                    <img src={Search} />
+                    <Input
+                        type="Search"
+                        placeholder="Search"
+                        className="form-control"
+                    />
+                </div>
+                <Button
+                    text="Export CSV"
+                    backgroundColor="white"
+                    color="#FE7720"
+                    border="1px solid #FE7720"
+                    width="134px"
+                    height="38px"
+                    borderRadius="10px"
+                />
+            </div>
+
             <div className="table-wrapper">
                 <table>
                     <thead>
@@ -96,9 +123,11 @@ function Table() {
                                 <td>{user.Country}</td>
                                 <td>{user.State}</td>
                                 <td>
-                                    <FaEye onClick={() => handleView(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
-                                    <FaEdit onClick={() => handleUpdate(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
-                                    <FaTrashAlt onClick={() => onDelete(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                    
+                                        <FaEye className="icon" onClick={() => handleView(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                        <FaEdit className="icon" onClick={() => handleUpdate(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                        <FaTrashAlt className="icon" onClick={() => onDelete(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                    
                                 </td>
                             </tr>
                         ))}
@@ -131,8 +160,8 @@ function Table() {
                                 <img src={Cancel} alt="cancel" />
                             </div>
                             <div className="mx-auto m-4">
-                                <button type="button" className="primary-btn" onClick={handleCancelDelete}>Cancel</button>
-                                <button type="button" className="secondary-btn" onClick={handleConfirmDelete}>Confirm</button>
+                                <button type="button" className="primary-btn" onClick={handleConfirmDelete}>Delete</button>
+                                <button type="button" className="secondary-btn" onClick={handleCancelDelete}>Cancel</button>
                             </div>
                         </div>
                     </div>

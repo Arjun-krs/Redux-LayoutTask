@@ -16,7 +16,7 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
       </Routes> */}
-      <div className=' d-flex'>
+      
         <SidebarNav />
         <div className='body-wrapper'>
           <div className='head-wrapper'><Header /></div>
@@ -27,7 +27,7 @@ function App() {
             </Routes>
           </section>
         </div>
-      </div>
+      
     </BrowserRouter>
 
   );

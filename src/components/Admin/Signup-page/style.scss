@@ -16,6 +16,15 @@
 
 }
 
+.eye-icon {
+    top: 70%;
+    transform: translateY(-50%);
+    right: 10px;
+    cursor: pointer;
+    color: #4D4D4E;
+
+}
+
 .login {
     display: flex;
     flex-direction: column;
@@ -25,16 +34,15 @@
 
     p {
         @include a-style;
-        color:white;
+        color: white;
         margin-top: 50px;
     }
+
     p a {
         color: #FE7720;
         @include a-style;
 
     }
-
-
 
     h2 {
         color: white;
