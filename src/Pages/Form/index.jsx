@@ -5,11 +5,10 @@ import { useDispatch } from "react-redux";
 import { loginAction } from "../../Redux/Action/index";
 import { updateAction } from "../../Redux/Action/index";
 import Input from "../../components/InputField/index";
-import Profile from "../../assets/images/pic.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import "../../App.scss";
 import { CountryDropdownComponent, StateDropdownComponent } from "../../components/Dropdown/index"
+import "../../App.scss";
 
 function Form() {
     const dispatch = useDispatch();
@@ -19,9 +18,7 @@ function Form() {
 
     useEffect(() => {
         if (isUpdate || isView) {
-            if (user) {
-                setFormData(user);
-            }
+            setFormData(user);
         }
     }, [isUpdate, isView, user]);
 
@@ -38,20 +35,20 @@ function Form() {
         State: "",
         City: "",
         Pincode: "",
+        Image: "",
 
     });
 
-    const handleChange = (value, fieldName) => {
+    const handleChange = (e, fieldName) => {
         if (!isView) {
+            const value = e.target.value || '';
             const updatedFormData = { ...formData, [fieldName]: value };
             setFormData(updatedFormData);
         }
     };
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
-
 
         if (isUpdate) {
             dispatch(updateAction(formData))
@@ -77,6 +74,7 @@ function Form() {
                         State: "",
                         City: "",
                         Pincode: "",
+                        Image: "",
 
                     });
                     navigate("/table");
@@ -85,6 +83,18 @@ function Form() {
                     console.error("Error logging in:", error);
                 });
         }
+    };
+    const handleCountry = (selectedCountry) => {
+        setFormData({
+            ...formData,
+            Country: selectedCountry
+        });
+    }
+    const handleState = (selectedState) => {
+        setFormData({
+            ...formData,
+            State: selectedState
+        });
     };
 
     const handleNavigation = (e) => {
@@ -112,11 +122,9 @@ function Form() {
                     <h4>Customer <FontAwesomeIcon icon={faChevronRight} width={12} height={12} />  Add Customer</h4>
                 </div>
             )}
-
-
             {isView && (
                 <div className="profile-display d-flex" style={{ gap: "30px" }}>
-                    <img src={Profile} alt="profile" />
+                    <img src={formData.Image} alt="profile" width={75} height={75} />
                     <div className="customer-detail ">
                         <h3>{formData.CustomerName}</h3>
                         <p>Customer ID: {formData.id}</p>
@@ -228,17 +236,17 @@ function Form() {
                             />
                         </div>
 
-
                         <CountryDropdownComponent
                             value={formData.Country ?? ''}
-                            onChange={(val) => handleChange(val, "Country")}
+                            // onChange={(val) => handleChange(val, "Country")}
+                            onChange={handleCountry}
                             disabled={isView}
                         />
-
                         <StateDropdownComponent
                             country={formData.Country}
                             value={formData.State ?? ''}
-                            onChange={(val) => handleChange(val, "State")}
+                            // onChange={(val) => handleChange(val, "State")}
+                            onChange={handleState}
                             disabled={isView}
                         />
                         <div className="textfield">
@@ -271,11 +279,7 @@ function Form() {
                 <div className="head-wrapper">
                     <div className="footer d-flex justify-content-end" style={{ gap: 20, padding: 20 }}>
                         <button className="secondary-btn" onClick={handleNavigation}>Go Back</button>
-                        {!isView && (
-                            <button type="submit" className="primary-btn">
-                                {isUpdate ? "Update" : "Save"}
-                            </button>
-                        )}
+                        <button type="submit" className="primary-btn" disabled={isView}>{isUpdate ? "Update" : "Save"}</button>
                     </div>
                 </div>
             </form>

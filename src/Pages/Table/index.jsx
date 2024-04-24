@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { FaTrashAlt, FaEye, FaEdit } from "react-icons/fa";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faStepBackward, faAngleLeft, faAngleRight, faStepForward } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getAction, deleteAction } from "../../Redux/Action/index";
-import Input from "../../components/InputField/index"
+import Pagination from '../../components/Pagination/index';
 import "../../App.scss";
 import Cancel from "../../assets/images/cancel.svg";
-import Search from "../../assets/images/search.svg";
-import Button from "../../components/Button/index"
+import SearchBar from '../../components/SearchBar/index';
+
 
 function Table() {
     const dispatch = useDispatch();
@@ -74,8 +74,8 @@ function Table() {
         }
     };
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
+    const handleSearchChange = (value) => {
+        setSearchQuery(value);
     };
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -104,27 +104,14 @@ function Table() {
     return (
         <>
             {error && <p className="text-danger">{error}</p>}
-            <div className="search-wrapper mt-4 d-flex" style={{ gap: 20, marginLeft: 800 }}>
-                <div className="input">
-                    <img src={Search} alt="search-icon" />
-                    <Input
-                        type="text"
-                        placeholder="Search"
-                        className="form-control"
-                        value={searchQuery}
-                        onChange={handleSearch}
-                    />
-                </div>
-                <Button
-                    text="Export CSV"
-                    backgroundColor="white"
-                    color="#FE7720"
-                    border="1px solid #FE7720"
-                    width="150px"
-                    height="38px"
-                    borderRadius="10px"
-                />
-            </div>
+            
+                <SearchBar searchQuery={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} />
+                
+            
+
+
+
+
             <div className="table-wrapper">
                 <table>
                     <thead>
@@ -155,69 +142,21 @@ function Table() {
                     </tbody>
                 </table>
 
-                <div className="pagination-container d-flex justify-content-between">
-                    <div className="page d-flex" style={{ width: 60 }}>
-                        <select
-                            id="itemsPerPage"
-                            className="form-select"
-                            value={itemsPerPage}
-                            onChange={(e) => handlePerPageOptionChange(Number(e.target.value))}
-                        >
-                            <option value="" disabled>Select items per page</option>
-                            {perPageOptions.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                        {/* <p>Coupons per page</p> */}
-                    </div>
-                    <div className="pagination-btn">
-                        <button
-                            className={`pagination-button ${currentPage === 1 ? 'disabled' : ''}`}
-                            onClick={() => handlePageClick(1)}
-                            disabled={currentPage === 1}
-                        >
-                            <FontAwesomeIcon icon={faStepBackward} />
-                        </button>
-                        <button
-                            className={`pagination-button ${currentPage === 1 ? 'disabled' : ''}`}
-                            onClick={() => handlePageClick(currentPage - 1)}
-                            disabled={currentPage === 1}
-                        >
-                            <FontAwesomeIcon icon={faAngleLeft} />
-                        </button>
-                        {Array.from({ length: pageCount }, (_, i) => (
-                            <button
-                                key={i + 1}
-                                className={`pagination-button ${currentPage === i + 1 ? 'active' : ''}`}
-                                onClick={() => handlePageClick(i + 1)}
-                            >
-                                {i + 1}
-                            </button>
-                        ))}
-                        <button
-                            className={`pagination-button ${currentPage === pageCount ? 'disabled' : ''}`}
-                            onClick={() => handlePageClick(currentPage + 1)}
-                            disabled={currentPage === pageCount}
-                        >
-                            <FontAwesomeIcon icon={faAngleRight} />
-                        </button>
-                        <button
-                            className={`pagination-button ${currentPage === pageCount ? 'disabled' : ''}`}
-                            onClick={() => handlePageClick(pageCount)}
-                            disabled={currentPage === pageCount}
-                        >
-                            <FontAwesomeIcon icon={faStepForward} />
-                        </button>
-                    </div>
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    pageCount={pageCount}
+                    onPageClick={handlePageClick}
+                    onPerPageChange={handlePerPageOptionChange}
+                    itemsPerPage={itemsPerPage}
+                    perPageOptions={perPageOptions}
+                />
             </div>
-            
-                <button className="fixed-bottom-end m-4 primary-btn btn rounded-circle" style={{ width: "50px", height: "50px" }} onClick={handleNavigation}>
+            <div className="fixed-bottom mb-5" style={{ left: "90%" }}>
+                <button className="primary-btn btn rounded-circle" style={{ width: "50px", height: "50px" }} onClick={handleNavigation}>
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
-            
+            </div>
+
             {showPopup && (
                 <div className="modal show" tabIndex="-1" role="dialog" style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
                     <div className="modal-dialog modal-dialog-centered" role="document">
@@ -241,3 +180,4 @@ function Table() {
 }
 
 export default Table;
+

@@ -4,17 +4,16 @@ import { useNavigate } from "react-router-dom";
 import "./style.scss";
 import Input from "../../components/InputField/index";
 
-function Login({ onLogin }) {
+function Login() {
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onLogin();
-    navigate('/table');
-  };
 
   const handleNavigation = () => {
     navigate("/signup");
+  };
+
+  const loginNav = () => {
+    navigate("/table");
   };
 
   return (
@@ -50,7 +49,7 @@ function Login({ onLogin }) {
             />
             <div className="pass text-end"><a href="#">Forgot Password?</a></div>
           </div>
-          <div className="btn btn-warning col-12 mt-4 text-white" onClick={handleSubmit}>Login</div>
+          <div className="btn btn-warning col-12 mt-4 text-white" onClick={loginNav}>Login</div>
           <p>Not a Merchant yet? <a href="#" onClick={handleNavigation}>Sign up Now</a> </p>
         </div>
       </div>

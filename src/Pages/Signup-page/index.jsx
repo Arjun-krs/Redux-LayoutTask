@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../../Redux/Action/index";
 import { Icon } from 'react-icons-kit';
+import PhoneNumberList from "../../components/CountryPhone/index"
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
+
 
 function Signup() {
     const navigate = useNavigate();
@@ -107,7 +109,7 @@ function Signup() {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div className="textfield mt-3">
+                    {/* <div className="textfield mt-3">
                         <label className="form-label">Phone Number</label>
                         <Input
                             type="text"
@@ -118,8 +120,14 @@ function Signup() {
                             onChange={(e) => setPhoneNumber(e.target.value)}
 
                         />
+                    </div> */}
+                    <div className="textfield mt-3">
+                        <label className="form-label">Phone Number</label>
+                        <PhoneNumberList />
                     </div>
-                    
+
+
+
                     <div className="textfield mt-3 position-relative">
                         <label className="form-label">Password</label>
                         <Input

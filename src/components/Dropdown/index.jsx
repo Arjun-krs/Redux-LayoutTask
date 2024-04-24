@@ -11,6 +11,7 @@ export const CountryDropdownComponent = ({ value, onChange, disabled }) => {
                 value={value}
                 onChange={onChange}
                 disabled={disabled}
+                name="Country"
 
             />
         </div>
@@ -28,6 +29,7 @@ export const StateDropdownComponent = ({ country, value, onChange, disabled }) =
                 value={value}
                 onChange={onChange}
                 disabled={disabled}
+                name="State"
             />
         </div>
     );
