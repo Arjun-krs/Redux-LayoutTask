@@ -13,13 +13,13 @@ function App() {
 
   return (
     <BrowserRouter>
-       {/* <Routes>
+       <Routes>
          <Route path='/' element={<Login />} />
          <Route path='/signup' element={<Signup />} />
-       </Routes> */}
+       </Routes>
 
 
-      <SidebarNav />
+      {/* <SidebarNav />
       <div className='body-wrapper'>
         <div className='head-wrapper'><Header /></div>
         <section>
@@ -28,7 +28,7 @@ function App() {
             <Route path="/Form" element={<Form />} />
           </Routes>
         </section>
-      </div>
+      </div> */}
 
     </BrowserRouter>
   );
