@@ -6,24 +6,42 @@
 
 }
 
-.login-page {
+.login-background {
 
-    width: 100%;
-    height: 100vh;
-    background-image: url('../../../assets/images/booboom.svg');
-    background-size:cover;
+    background-image: url('../../assets/images/booboom.svg');
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    
 
 }
 
-.login-fields {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    
+.eye-icon {
+    top: 88%;
+    transform: translateY(-50%);
+    right: 10px;
+    cursor: pointer;
+    color: #4D4D4E;  
 
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    p {
+        @include a-style;
+        color: white;
+        margin-top: 50px;
+    }
+
+    p a {
+        color: #FE7720;
+        @include a-style;
+
+    }
 
     h2 {
         color: white;
@@ -51,9 +69,10 @@
         a {
             color: white;
             @include a-style;
-            
+
         }
-        p{
+
+        p {
             text-align: center;
             margin-top: 10px;
         }
@@ -61,7 +80,7 @@
         p a {
             color: #FE7720;
             @include a-style;
-            
+
         }
 
     }

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Boom from "../../../assets/images/boomlogo.svg";
-import "../Signup-page/style.scss";
-import Input from "../../InputField/index";
+import Boom from "../../../src/assets/images/boomlogo.svg";
+import "./style.scss";
+import Input from "../../components/InputField/index";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginAction } from "../Redux/Action/index";
+import { loginAction } from "../../Redux/Action/index";
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
@@ -119,18 +119,19 @@ function Signup() {
 
                         />
                     </div>
+                    
                     <div className="textfield mt-3 position-relative">
                         <label className="form-label">Password</label>
                         <Input
                             type={type}
                             name="Password"
                             placeholder="Enter"
-                            className="form-control pr-4"
+                            className="form-control"
                             value={Password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <span className="eye-icon position-absolute" onClick={handleToggle}>
-                            <Icon className="icon" icon={icon} size={16} />
+                            <Icon className="eye-icon" icon={icon} size={16} />
                         </span>
                     </div>
 

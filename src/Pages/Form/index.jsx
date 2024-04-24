@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch } from "react-redux";
-import { loginAction } from "../Action/index";
-import { updateAction } from "../Action/index";
-import Input from "../InputField/index";
+import { loginAction } from "../../Redux/Action/index";
+import { updateAction } from "../../Redux/Action/index";
+import Input from "../../components/InputField/index";
 import Profile from "../../assets/images/pic.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import "../../App.scss";
-import { CountryDropdownComponent, StateDropdownComponent } from "../Dropdown/index"
+import { CountryDropdownComponent, StateDropdownComponent } from "../../components/Dropdown/index"
 
 function Form() {
     const dispatch = useDispatch();
@@ -56,7 +56,7 @@ function Form() {
         if (isUpdate) {
             dispatch(updateAction(formData))
                 .then(() => {
-                    navigate("/");
+                    navigate("/table");
                 })
                 .catch((error) => {
                     console.error("Error updating data:", error);
@@ -79,7 +79,7 @@ function Form() {
                         Pincode: "",
 
                     });
-                    navigate("/");
+                    navigate("/table");
                 })
                 .catch((error) => {
                     console.error("Error logging in:", error);
@@ -89,7 +89,7 @@ function Form() {
 
     const handleNavigation = (e) => {
         e.preventDefault();
-        navigate("/");
+        navigate("/table");
     };
 
     return (

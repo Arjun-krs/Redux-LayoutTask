@@ -11,8 +11,7 @@ export const CountryDropdownComponent = ({ value, onChange, disabled }) => {
                 value={value}
                 onChange={onChange}
                 disabled={disabled}
-                priorityOptions={["IN", "US", "GB", "FR"]}
-                required
+
             />
         </div>
     );
@@ -29,7 +28,6 @@ export const StateDropdownComponent = ({ country, value, onChange, disabled }) =
                 value={value}
                 onChange={onChange}
                 disabled={disabled}
-                required
             />
         </div>
     );

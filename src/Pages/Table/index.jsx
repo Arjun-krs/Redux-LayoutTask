@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { FaTrashAlt, FaEye, FaEdit } from "react-icons/fa";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faStepBackward, faAngleLeft, faAngleRight, faStepForward } from '@fortawesome/free-solid-svg-icons';
-import { getAction, deleteAction } from "../Action/index";
-import Input from "../InputField/index"
+import { getAction, deleteAction } from "../../Redux/Action/index";
+import Input from "../../components/InputField/index"
 import "../../App.scss";
 import Cancel from "../../assets/images/cancel.svg";
 import Search from "../../assets/images/search.svg";
-import Button from "../Button/index"
+import Button from "../../components/Button/index"
 
 function Table() {
     const dispatch = useDispatch();
@@ -146,9 +146,9 @@ function Table() {
                                 <td>{user.Country}</td>
                                 <td>{user.State}</td>
                                 <td>
-                                    <FaEye onClick={() => handleView(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
-                                    <FaEdit onClick={() => handleUpdate(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
-                                    <FaTrashAlt onClick={() => onDelete(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                    <FaEye className="icon" onClick={() => handleView(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                    <FaEdit className="icon" onClick={() => handleUpdate(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
+                                    <FaTrashAlt className="icon" onClick={() => onDelete(user.id)} style={{ cursor: "pointer", margin: "10px 13px" }} />
                                 </td>
                             </tr>
                         ))}
@@ -213,11 +213,11 @@ function Table() {
                     </div>
                 </div>
             </div>
-            <div className="fixed-bottom text-end m-4">
-                <button className="primary-btn btn rounded-circle" style={{ width: "50px", height: "50px" }} onClick={handleNavigation}>
+            
+                <button className="fixed-bottom-end m-4 primary-btn btn rounded-circle" style={{ width: "50px", height: "50px" }} onClick={handleNavigation}>
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
-            </div>
+            
             {showPopup && (
                 <div className="modal show" tabIndex="-1" role="dialog" style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
                     <div className="modal-dialog modal-dialog-centered" role="document">
