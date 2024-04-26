@@ -7,7 +7,8 @@ import { updateAction } from "../../Redux/Action/index";
 import Input from "../../components/InputField/index";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { CountryDropdownComponent, StateDropdownComponent } from "../../components/Dropdown/index"
+import { CountryDropdownComponent } from "../../components/CountryDropDown/index";
+import { StateDropdownComponent } from "../../components/StateDropDown/index";
 import "../../App.scss";
 
 function Form() {
@@ -39,16 +40,71 @@ function Form() {
 
     });
 
+    const [errors, setErrors] = useState({
+        CustomerName: "",
+        CustomerEmail: "",
+        CustomerContact: "",
+        FirstName: "",
+        LastName: "",
+        AlternateContact: "",
+        AddresslineOne: "",
+        AddresslineTwo: "",
+        Country: "",
+        State: "",
+        City: "",
+        Pincode: "",
+        Image: "",
+    });
+
     const handleChange = (e, fieldName) => {
         if (!isView) {
             const value = e.target.value || '';
             const updatedFormData = { ...formData, [fieldName]: value };
             setFormData(updatedFormData);
         }
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: ''
+        }));
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const newErrors = {};
+
+        if (!formData.CustomerName, !formData.FirstName, !formData.LastName, !formData.AddresslineOne, !formData.AddresslineTwo, !formData.City, !formData.Pincode, !formData.Country, !formData.State) {
+            newErrors.CustomerName = 'Customer Name is required';
+            newErrors.FirstName = 'First Name is required';
+            newErrors.LastName = 'Last Name is required';
+            newErrors.AddresslineOne = 'Address Line One is required';
+            newErrors.AddresslineTwo = 'Address Line Two is required';
+            newErrors.City = 'City is required';
+            newErrors.Pincode = 'Pincode is required';
+            newErrors.Country = 'Country is required';
+            newErrors.State = 'State is required';
+
+        }
+
+        if (!formData.CustomerEmail) {
+            newErrors.CustomerEmail = 'Customer Email is required';
+        } else {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(formData.CustomerEmail)) {
+                newErrors.CustomerEmail = 'Invalid email format';
+            }
+        }
+
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(formData.CustomerContact, formData.AlternateContact)) {
+            newErrors.CustomerContact = 'Invalid phone number format';
+            newErrors.AlternateContact = 'Invalid Alternate Phone number format';
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
         if (isUpdate) {
             dispatch(updateAction(formData))
@@ -59,6 +115,7 @@ function Form() {
                     console.error("Error updating data:", error);
                 });
         } else {
+
             dispatch(loginAction(formData))
                 .then(() => {
                     setFormData({
@@ -75,7 +132,6 @@ function Form() {
                         City: "",
                         Pincode: "",
                         Image: "",
-
                     });
                     navigate("/table");
                 })
@@ -84,6 +140,7 @@ function Form() {
                 });
         }
     };
+
     const handleCountry = (selectedCountry) => {
         setFormData({
             ...formData,
@@ -145,6 +202,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "CustomerName")}
                                 disabled={isView}
                             />
+                            {errors.CustomerName && <span className="text-danger">{errors.CustomerName}</span>}
                         </div>
                         <div className="textfield">
                             <label className="form-label">Customer Email</label>
@@ -156,6 +214,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "CustomerEmail")}
                                 disabled={isView}
                             />
+                            {errors.CustomerEmail && <span className="text-danger">{errors.CustomerEmail}</span>}
                         </div>
                         <div className="textfield">
                             <label className="form-label">Customer Phone Number</label>
@@ -167,6 +226,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "CustomerContact")}
                                 disabled={isView}
                             />
+                            {errors.CustomerContact && <span className="text-danger">{errors.CustomerContact}</span>}
                         </div>
                     </div>
                 </div>
@@ -185,6 +245,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "FirstName")}
                                 disabled={isView}
                             />
+                            {errors.FirstName && <span className="text-danger">{errors.FirstName}</span>}
                         </div>
                         <div className="textfield">
                             <label className="form-label" htmlFor="LastName1">Last Name</label>
@@ -197,6 +258,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "LastName")}
                                 disabled={isView}
                             />
+                            {errors.LastName && <span className="text-danger">{errors.LastName}</span>}
                         </div>
                         <div className="textfield">
                             <label className="form-label" htmlFor="AlternateContact">Alternate Phone Number</label>
@@ -209,6 +271,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "AlternateContact")}
                                 disabled={isView}
                             />
+                            {errors.AlternateContact && <span className="text-danger">{errors.AlternateContact}</span>}
                         </div>
 
                         <div className="textfield">
@@ -222,6 +285,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "AddresslineOne")}
                                 disabled={isView}
                             />
+                            {errors.AddresslineOne && <span className="text-danger">{errors.AddresslineOne}</span>}
                         </div>
                         <div className="textfield">
                             <label className="form-label" htmlFor="AddresslineTwo">Address Line 2</label>
@@ -234,21 +298,28 @@ function Form() {
                                 onChange={(e) => handleChange(e, "AddresslineTwo")}
                                 disabled={isView}
                             />
+                            {errors.AddresslineTwo && <span className="text-danger">{errors.AddresslineTwo}</span>}
+                        </div>
+                        <div className="textfield">
+                            <CountryDropdownComponent
+                                value={formData.Country ?? ''}
+                                onChange={handleCountry}
+                                disabled={isView}
+
+                            />
+                            {errors.Country && <span className="text-danger">{errors.Country}</span>}
                         </div>
 
-                        <CountryDropdownComponent
-                            value={formData.Country ?? ''}
-                            // onChange={(val) => handleChange(val, "Country")}
-                            onChange={handleCountry}
-                            disabled={isView}
-                        />
-                        <StateDropdownComponent
-                            country={formData.Country}
-                            value={formData.State ?? ''}
-                            // onChange={(val) => handleChange(val, "State")}
-                            onChange={handleState}
-                            disabled={isView}
-                        />
+                        <div className="textfield">
+                            <StateDropdownComponent
+                                country={formData.Country}
+                                value={formData.State ?? ''}
+                                onChange={handleState}
+                                disabled={isView}
+                            />
+                            {errors.State && <span className="text-danger">{errors.State}</span>}
+                        </div>
+
                         <div className="textfield">
                             <label className="form-label" htmlFor="City">City</label>
                             <Input
@@ -259,8 +330,8 @@ function Form() {
                                 value={formData.City || ''}
                                 onChange={(e) => handleChange(e, "City")}
                                 disabled={isView}
-
                             />
+                            {errors.City && <span className="text-danger">{errors.City}</span>}
                         </div>
                         <div className="textfield">
                             <label className="form-label" htmlFor="Pincode">Pincode</label>
@@ -273,6 +344,7 @@ function Form() {
                                 onChange={(e) => handleChange(e, "Pincode")}
                                 disabled={isView}
                             />
+                            {errors.Pincode && <span className="text-danger">{errors.Pincode}</span>}
                         </div>
                     </div>
                 </div>
@@ -288,3 +360,4 @@ function Form() {
 }
 
 export default Form;
+

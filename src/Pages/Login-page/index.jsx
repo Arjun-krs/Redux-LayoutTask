@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Boom from "../../assets/images/boomlogo.svg";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "./style.scss";
+import {userLoginAction} from "../../Redux/Action/auth"
 import Input from "../../components/InputField/index";
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -20,30 +23,64 @@ function Login() {
 
   const validate = () => {
     let validationErrors = {};
-
+  
+    // Validate Username
     if (!formData.username) {
       validationErrors.username = 'Username is required';
+    } else if (formData.username.length < 5) {
+      validationErrors.username = 'Username should be at least 5 characters';
     }
-
+  
+    // Validate Password
     if (!formData.password) {
       validationErrors.password = 'Password is required';
+    } else if (formData.password.length < 8) {
+      validationErrors.password = 'Password should be at least 8 characters';
     }
-
+  
     setErrors(validationErrors);
-
+  
     return validationErrors;
   };
+  
+
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-
-      console.log('Form is valid. Ready for login.');
-
-    }
+      console.log('Form is valid. Proceeding with login...');
+      
+      dispatch(userLoginAction({
+        login: formData.username,
+        password: formData.password
+      }))
+      .then((actionResult) => {
+        console.log('Action dispatched:', actionResult);
+        
+        if (userLoginAction.fulfilled.match(actionResult)) {
+          const response = actionResult.payload;
+          console.log('Fulfilled with:', response);
+          
+          if (response && response.token) {
+            localStorage.setItem('token', response.token);
+            console.log('Login successful');
+            navigate("/table");
+          } else {
+            console.log('Login failed: No token found in response');
+          }
+        } else if (userLoginAction.rejected.match(actionResult)) {
+          console.log('Rejected with:', actionResult.error);
+        }
+      })
+      .catch((error) => {
+        console.error('Login error:', error);
+      });
+    }             
   };
+  
 
   const handleNavigation = () => {
     navigate("/signup");

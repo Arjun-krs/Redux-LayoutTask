@@ -106,12 +106,6 @@ function Table() {
             {error && <p className="text-danger">{error}</p>}
             
                 <SearchBar searchQuery={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} />
-                
-            
-
-
-
-
             <div className="table-wrapper">
                 <table>
                     <thead>

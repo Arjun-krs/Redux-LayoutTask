@@ -28,6 +28,10 @@ $hover-color: #e9ecef;
   border-bottom-left-radius: 40px 40px;
 }
 
+.side{
+  position: fixed;
+}
+
 .icon {
   background-color: $icon-bg-color;
   width: 30px;

@@ -16,11 +16,13 @@
 }
 
 .eye-icon {
-    top: 88%;
-    transform: translateY(-50%);
+    top: 51%;
     right: 10px;
+    position: absolute;
     cursor: pointer;
     color: #4D4D4E;  
+    background-color: transparent;
+    border: none;
 
 }
 
