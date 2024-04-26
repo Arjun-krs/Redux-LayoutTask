@@ -31,18 +31,18 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             const dataObject = {
                 username: username,
                 password: password,
-                phone_number: phone_number, 
+                phone_number: phone_number,
                 email: email,
                 business_legal_name: business_legal_name
             };
-            
-    
+
+
             dispatch(signupAction(dataObject))
                 .then(() => {
                     navigate("/");
@@ -52,8 +52,8 @@ function Signup() {
                 });
         }
     };
-    
-    
+
+
     const handlePhoneNumberChange = (value) => {
         const { country_code, number } = value;
         setPhone_number({

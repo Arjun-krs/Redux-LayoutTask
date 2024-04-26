@@ -2,8 +2,8 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Form from "../Pages/Form/index";
 import Table from "../Pages/Table/index";
-import Login from "../Pages/Login-page/index";
-import Signup from "../Pages/Signup-page/index";
+import Login from "../Pages/Loginpage/index";
+import Signup from "../Pages/Signuppage/index";
 
 function Routing() {
     return (
