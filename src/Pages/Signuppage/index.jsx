@@ -58,7 +58,8 @@ function Signup() {
         const { country_code, number } = value;
         setPhone_number({
             country_code: country_code,
-            number: number.replace(/\s/g, '')
+            number: number.replace(/[^A-Z0-9]+/ig, "")
+            
         });
     };
 
