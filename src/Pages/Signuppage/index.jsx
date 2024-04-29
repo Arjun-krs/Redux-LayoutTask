@@ -13,8 +13,6 @@ import { eye } from 'react-icons-kit/feather/eye';
 function Signup() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    // Form state
     const [business_legal_name, setBusiness_legal_name] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -24,8 +22,6 @@ function Signup() {
     });
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
-
-    // Password visibility state
     const [type, setType] = useState('Password');
     const [icon, setIcon] = useState(eyeOff);
 
@@ -65,32 +61,23 @@ function Signup() {
 
     const validate = () => {
         let validationErrors = {};
-
-        // Validate Business Legal Name
         if (!business_legal_name) {
             validationErrors.business_legal_name = 'Business Legal Name is required';
         }
-
-        // Validate Username
         if (!username) {
             validationErrors.username = 'User Handle is required';
         }
-
-        // Validate Email
         if (!email) {
             validationErrors.email = 'E-mail Address is required';
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             validationErrors.email = 'Invalid E-mail Address';
         }
-
         if (!password) {
             validationErrors.password = 'Password is required';
         } else if (password.length < 8) {
             validationErrors.password = 'Password should be at least 8 characters';
         }
-
         setErrors(validationErrors);
-
         return validationErrors;
     };
 
@@ -182,9 +169,15 @@ function Signup() {
                             <Icon className="eye-icon" icon={icon} size={16} />
                         </button>
                         {errors.password && <div className="text-danger">{errors.password}</div>}
+                        <div className="password-check"  >
+                            <p style={{color: "#4D4D4E"}}>Min 8 Character</p>
+                            <p style={{color: "#4D4D4E"}}>1 Upper & Lower case</p>
+                            <p style={{color: "#4D4D4E"}}>1 Number</p>
+                            <p style={{color: "#4D4D4E"}}>1 Special Char</p>
+                        </div>
                     </div>
 
-                    <button type="submit" className="btn btn-warning col-12 mt-4 text-white">Register</button>
+                    <button type="submit" className="btn col-12 mt-4 text-white" style={{backgroundColor:"#FE7720"}} >Register</button>
                 </form>
                 <p>Already have an account? <a href="#" onClick={handleNavigation}>Login Now</a> </p>
                 <p>By creating an account, you agree the <a href="#">Terms and conditions</a></p>

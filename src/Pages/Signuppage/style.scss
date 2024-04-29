@@ -1,40 +1,49 @@
-@mixin a-style {
-    text-decoration: none;
+@mixin text-style {
     font-size: 14px;
     font-weight: 400;
     line-height: 16.94px;
+}
 
+@mixin link-style {
+    @include text-style;
+    text-decoration: none;
 }
 
 .login-background {
-
     background-image: url('../../assets/images/booboom.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-
 }
 
 .eye-icon {
-    top: 51%;
-    right: 10px;
     position: absolute;
+    top: 28%;
+    right: 10px;
     cursor: pointer;
-    color: #4D4D4E;  
+    color: #4D4D4E;
     background-color: transparent;
     border: none;
-
 }
 
-.react-international-phone-input{
+.react-international-phone-input {
+    @include text-style;
     padding: .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
     color: black;
     border-radius: 10px;
     width: 100%;
+}
 
+.password-check {
+    display: flex;
+    gap: 8px;
+
+    p {
+        background: #E9E9E9;
+        color: #4D4D4E;
+        border-radius: 8px;
+        padding: 5px;
+    }
 }
 
 .login {
@@ -44,25 +53,12 @@
     align-items: center;
     margin-top: 20px;
 
-    p {
-        @include a-style;
-        color: white;
-        margin-top: 50px;
-    }
-
-    p a {
-        color: #FE7720;
-        @include a-style;
-
-    }
-
     h2 {
         color: white;
         font-size: 32px;
         font-weight: 500;
         line-height: 38.72px;
         text-align: left;
-
     }
 
     h5 {
@@ -71,7 +67,17 @@
         font-weight: 400;
         line-height: 24.2px;
         text-align: left;
+    }
 
+    p {
+        @include text-style;
+        color: white;
+        margin-top: 50px;
+
+        a {
+            color: #FE7720;
+            @include link-style;
+        }
     }
 
     .form {
@@ -81,21 +87,17 @@
 
         a {
             color: white;
-            @include a-style;
-
+            @include link-style;
         }
 
         p {
             text-align: center;
             margin-top: 10px;
+
+            a {
+                color: #FE7720;
+                @include link-style;
+            }
         }
-
-        p a {
-            color: #FE7720;
-            @include a-style;
-
-        }
-
     }
-
 }

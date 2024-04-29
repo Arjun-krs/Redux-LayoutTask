@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../../assets/images/Logo.svg";
 import Homemenu from "../../assets/images/homemenu.svg";
 import Product from "../../assets/images/product.svg";
@@ -10,14 +10,32 @@ import Support from "../../assets/images/support.svg";
 import Report from "../../assets/images/report.svg";
 import Setting from "../../assets/images/settings.svg";
 import Logout from "../../assets/images/logout.svg";
+import { useNavigate } from "react-router-dom";
 import "../../App.scss";
 
 function SidebarNav() {
   const [activeItem, setActiveItem] = useState(null);
+  const navigate = useNavigate();
 
   const handleItemClick = (item) => {
     setActiveItem(item);
+    if (item === "Logout") {
+      try {
+        const deletedToken = localStorage.getItem("token");
+        console.log("Token to delete:", deletedToken);
+        localStorage.removeItem("token");
+        console.log("Token deleted successfully");
+        navigate("/");
+      } catch (error) {
+        console.error("Error deleting token:", error);
+      }
+    }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("Token:", token);
+  }, []);
 
   return (
     <div className="navigate d-flex flex-column p-3" style={{ gap: 28 }}>
@@ -27,7 +45,7 @@ function SidebarNav() {
         alt="logo"
         width={40}
         height={40}
-        onClick={() => handleItemClick("Logo")}
+
       />
       <img
         className={activeItem === "Home" ? "active" : ""}
@@ -35,7 +53,7 @@ function SidebarNav() {
         alt="home"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Home")}
+
       />
       <img
         className={activeItem === "Product" ? "active" : ""}
@@ -43,7 +61,7 @@ function SidebarNav() {
         alt="product"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Product")}
+
       />
       <img
         className={activeItem === "Cart" ? "active" : ""}
@@ -51,7 +69,7 @@ function SidebarNav() {
         alt="cart"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Cart")}
+
       />
       <img
         className={activeItem === "Offer" ? "active" : ""}
@@ -59,7 +77,7 @@ function SidebarNav() {
         alt="offer"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Offer")}
+
       />
       <img
         className={activeItem === "Profile" ? "active" : ""}
@@ -67,7 +85,7 @@ function SidebarNav() {
         alt="profile"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Profile")}
+
       />
 
       <img
@@ -76,7 +94,7 @@ function SidebarNav() {
         alt="review"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Review")}
+
       />
       <img
         className={activeItem === "Support" ? "active" : ""}
@@ -84,7 +102,7 @@ function SidebarNav() {
         alt="support"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Support")}
+
       />
       <img
         className={activeItem === "Report" ? "active" : ""}
@@ -92,7 +110,7 @@ function SidebarNav() {
         alt="report"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Report")}
+
       />
       <img
         className={activeItem === "Setting" ? "active" : ""}
@@ -100,7 +118,7 @@ function SidebarNav() {
         alt="setting"
         width={30}
         height={30}
-        onClick={() => handleItemClick("Setting")}
+
       />
       <img
         className={activeItem === "Logout" ? "active" : ""}
